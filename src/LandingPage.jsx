@@ -22,6 +22,8 @@ const partnerLogos = [
 
 const PRIMARY_SECTION_BG = '#113F67';
 const SECONDARY_COLOR = '#D6F4ED';
+const HERO_GRADIENT = 'radial-gradient(circle at top left, #1a9cf5 0%, #000d1a 45%, #000000 100%)';
+const STICKY_HEADER_BG = '#000d1a';
 
 // Blob decorator component for white/gray sections
 const BlobDecorator = ({ count = 2 }) => {
@@ -543,7 +545,7 @@ const projectImageSources = projectTabs.flatMap(({ blocks }) =>
   })
 );
 
-const MenuLinks = ({ className = '', onItemClick, menuId }) => (
+const MenuLinks = ({ className = '', onItemClick, menuId, transparent }) => (
   <nav
     className={`flex flex-col gap-2 text-sm font-semibold text-white md:flex-row md:items-center ${className}`}
     id={menuId}
@@ -555,10 +557,12 @@ const MenuLinks = ({ className = '', onItemClick, menuId }) => (
         onClick={onItemClick}
         className={`rounded-full px-4 py-2 transition-colors duration-150 ${
           isActive
-            ? `text-gray-900 shadow`
+            ? transparent
+              ? 'text-white bg-white/20 shadow'
+              : 'text-gray-900 shadow'
             : 'text-white/90 hover:text-[#1d83b3] hover:bg-white/10'
         }`}
-        style={isActive ? { backgroundColor: SECONDARY_COLOR } : {}}
+        style={isActive && !transparent ? { backgroundColor: SECONDARY_COLOR } : {}}
       >
         {label}
       </a>
@@ -593,7 +597,17 @@ const MenuToggleButton = ({ isOpen, onToggle }) => {
 
 const LandingHeader = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setScrolled] = useState(false);
   const menuWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
@@ -610,9 +624,21 @@ const LandingHeader = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobileMenuOpen]);
 
+  const transparent = !isScrolled;
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-800 overflow-hidden" style={{ backgroundColor: PRIMARY_SECTION_BG }}>
-      <div className="absolute bottom-0 right-0 w-64 h-64 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.12) 100%)' }}></div>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 overflow-hidden transition-all duration-300 ${
+        transparent ? 'border-b border-transparent' : 'border-b'
+      }`}
+      style={{
+        backgroundColor: transparent ? 'transparent' : STICKY_HEADER_BG,
+        ...(transparent ? {} : { borderColor: 'rgba(255,255,255,0.08)' }),
+      }}
+    >
+      {!transparent && (
+        <div className="absolute bottom-0 right-0 w-64 h-64 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.12) 100%)' }} />
+      )}
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6 lg:px-8 relative z-10">
         <a href="/" className="flex items-center gap-2">
           <img alt="Logo" src="/assets/logo.png" className="h-10 w-auto" />
@@ -623,24 +649,29 @@ const LandingHeader = () => {
             <MenuToggleButton isOpen={isMobileMenuOpen} onToggle={() => setMobileMenuOpen((prev) => !prev)} />
 
             {isMobileMenuOpen && (
-              <div className="absolute left-0 top-12 z-50 min-w-[200px] rounded-2xl border border-white/20" style={{ backgroundColor: PRIMARY_SECTION_BG }}>
-                <MenuLinks onItemClick={() => setMobileMenuOpen(false)} />
+              <div
+                className="absolute left-0 top-12 z-50 min-w-[200px] rounded-2xl border border-white/20"
+                style={{ backgroundColor: transparent ? 'rgba(0,13,26,0.95)' : STICKY_HEADER_BG }}
+              >
+                <MenuLinks onItemClick={() => setMobileMenuOpen(false)} transparent={transparent} />
               </div>
             )}
           </div>
 
           <div className="hidden flex-1 justify-center md:flex">
-            <MenuLinks className="justify-center" menuId="kt_landing_menu" />
+            <MenuLinks className="justify-center" menuId="kt_landing_menu" transparent={transparent} />
           </div>
         </div>
 
         <div className="hidden md:flex md:justify-end ml-4">
           <a
-            href="#download"
-            className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold text-gray-900 shadow transition"
-            style={{ backgroundColor: SECONDARY_COLOR }}
-            onMouseEnter={(e) => e.target.style.opacity = '0.9'}
-            onMouseLeave={(e) => e.target.style.opacity = '1'}
+            href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+            className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold shadow transition ${
+              transparent ? 'text-white border-2 border-white/80 hover:bg-white/10' : 'text-gray-900'
+            }`}
+            style={transparent ? {} : { backgroundColor: SECONDARY_COLOR }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
           >
             Download Now
           </a>
@@ -652,7 +683,13 @@ const LandingHeader = () => {
 
 const HeroSection = () => {
   return (
-  <section className="relative flex w-full flex-col items-center justify-center overflow-hidden px-4 pt-24 pb-32 text-center sm:px-6 lg:px-8 lg:pt-28 lg:pb-40" style={{ backgroundColor: PRIMARY_SECTION_BG }}>
+  <section
+    className="relative flex w-full flex-col items-center overflow-hidden px-4 pt-12 pb-12 sm:px-6 lg:px-8"
+    style={{
+      background: HERO_GRADIENT,
+      minHeight: 'calc(100vh - 5.5rem)',
+    }}
+  >
     {/* White gradient in bottom right */}
     <div className="absolute bottom-0 right-0 w-96 h-96 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 100%)' }}></div>
     {/* Floating Blobs */}
@@ -671,51 +708,101 @@ const HeroSection = () => {
       />
     </div>
 
-    <div className="relative z-10 mx-auto max-w-4xl">
-      <h1 className="mb-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
-        Find the best freelance opportunities in one place with Freelancing Hub.
-      </h1>
+    {/* Two-column: content left, picture space right */}
+    <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16 mt-20">
+      {/* Left: content */}
+      <div className="flex flex-col text-left">
+        <h1 className="mb-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
+          Find the best freelance opportunities in one place with Freelancing Hub.
+        </h1>
 
-      <p className="mb-10 text-lg leading-relaxed text-white/90 sm:text-xl lg:text-2xl">
-        Freelancing Hub brings freelance jobs from multiple platforms into a single, simple dashboard with smart filters and instant alerts, helping you build a stable freelance career with confidence.
-      </p>
-      
-      {/* Store download badges */}
-      <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-        <motion.a
-          href="#download"
-          className="inline-flex items-center justify-center"
-          whileHover={{ scale: 1.05, opacity: 0.9 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <div
-            className="flex items-center justify-center overflow-hidden rounded-lg bg-black"
-            style={{ width: '11rem', height: '3.5rem' }}
+        <p className="mb-8 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg lg:text-xl">
+          Freelancing Hub brings freelance jobs from multiple platforms into a single, simple dashboard with smart filters and instant alerts, helping you build a stable freelance career with confidence.
+        </p>
+
+        {/* Store download badges - icon + text, clear background */}
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:gap-6">
+          <motion.a
+            href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+            className="inline-flex items-center gap-3 overflow-hidden rounded-xl border border-white/20 bg-black/90 px-4 py-3 text-white shadow-lg transition hover:bg-black hover:border-white/30"
+            whileHover={{ scale: 1.02, opacity: 0.95 }}
+            whileTap={{ scale: 0.98 }}
           >
             <img
-              src="/assets/play.png"
-              alt="Get it on Google Play"
-              className="h-full w-full object-contain"
+              src="/assets/paly.png"
+              alt=""
+              className="h-9 w-9 flex-shrink-0 object-contain"
+              aria-hidden="true"
             />
-          </div>
-        </motion.a>
-        <motion.a
-          href="#download"
-          className="inline-flex items-center justify-center"
-          whileHover={{ scale: 1.05, opacity: 0.9 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <div
-            className="flex items-center justify-center overflow-hidden rounded-lg bg-black"
-            style={{ width: '11rem', height: '3.5rem' }}
+            <div className="text-left">
+              <span className="block text-[10px] leading-tight text-white/80">Get it on</span>
+              <span className="block text-sm font-semibold leading-tight">Google Play</span>
+            </div>
+          </motion.a>
+          <motion.a
+            href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+            className="inline-flex items-center gap-3 overflow-hidden rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-gray-900 shadow-lg transition hover:bg-white hover:border-white/40"
+            whileHover={{ scale: 1.02, opacity: 0.95 }}
+            whileTap={{ scale: 0.98 }}
           >
             <img
               src="/assets/store.png"
-              alt="Download on the App Store"
-              className="h-full w-full object-contain"
+              alt=""
+              className="h-9 w-9 flex-shrink-0 object-contain"
+              aria-hidden="true"
+            />
+            <div className="text-left">
+              <span className="block text-[10px] leading-tight text-gray-500">Download on the</span>
+              <span className="block text-sm font-semibold leading-tight text-gray-900">App Store</span>
+            </div>
+          </motion.a>
+        </div>
+      </div>
+
+      {/* Right: picture space — hero_3 (left) + hero_1 (center) + hero_2 (right), same bottom baseline */}
+      <div className="flex items-end justify-center lg:justify-end lg:ml-auto">
+        <div className="relative w-full max-w-lg lg:max-w-xl flex items-end overflow-visible">
+          {/* hero_3 — left side, rotated -15deg from bottom, same baseline */}
+          <div
+            className="absolute left-0 bottom-0 z-0 w-[60%] overflow-visible"
+            style={{
+              transformOrigin: 'bottom center',
+              transform: 'rotate(-15deg)',
+            }}
+          >
+            <div className="aspect-[4/3] overflow-hidden">
+              <img
+                src="/assets/hero_3.jpeg"
+                alt="Freelancing Hub projects"
+                className="h-full w-full object-contain object-center"
+              />
+            </div>
+          </div>
+          {/* hero_1 — main, upright, bottom-aligned */}
+          <div className="relative z-10 w-full aspect-[4/3] flex items-center justify-center min-h-[320px] sm:min-h-[380px]">
+            <img
+              src="/assets/hero_1.jpeg"
+              alt="Freelancing Hub app"
+              className="h-full w-full object-contain object-center object-bottom"
             />
           </div>
-        </motion.a>
+          {/* hero_2 — right side, rotated 15deg from bottom, same baseline as hero_1 */}
+          <div
+            className="absolute right-0 bottom-0 z-0 w-[60%] overflow-visible"
+            style={{
+              transformOrigin: 'bottom center',
+              transform: 'rotate(15deg)',
+            }}
+          >
+            <div className="aspect-[4/3] overflow-hidden">
+              <img
+                src="/assets/hero_2.jpeg"
+                alt="Freelancing Hub notifications"
+                className="h-full w-full object-contain object-center"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -838,15 +925,14 @@ const StayConnectedSection = () => (
             {/* Second larger circle (light background tone) */}
             <div className="absolute -z-10 h-[360px] w-[360px] rounded-full border border-[#1d83b3]/10 bg-[#f4f8fc]" />
 
-            {/* Actual phone mockup */}
-            <div className="relative z-10 h-[430px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] p-2 shadow-2xl">
-              <div className="h-full w-full rounded-[32px] bg-white p-3">
-                <div className="mb-3 h-6 rounded-xl bg-[#1d83b3]/10" />
-                <div className="space-y-3">
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                </div>
+            {/* Actual phone mockup — hero_1 */}
+            <div className="relative z-10 h-[470px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] shadow-2xl">
+              <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
+                <img
+                  src="/assets/hero_1.jpeg"
+                  alt="Freelancing Hub app"
+                  className="h-full w-full object-cover object-top"
+                />
               </div>
             </div>
           </div>
@@ -972,15 +1058,14 @@ const ConnectAnywhereSection = () => (
             {/* Second larger circle (light background tone) */}
             <div className="absolute -z-10 h-[360px] w-[360px] rounded-full border border-[#1d83b3]/10 bg-white" />
 
-            {/* Actual phone mockup */}
-            <div className="relative z-10 h-[430px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] p-2 shadow-2xl">
-              <div className="h-full w-full rounded-[32px] bg-white p-3">
-                <div className="mb-3 h-6 rounded-xl bg-[#1d83b3]/10" />
-                <div className="space-y-3">
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                </div>
+            {/* Actual phone mockup — hero_2 */}
+            <div className="relative z-10 h-[470px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] shadow-2xl">
+              <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
+                <img
+                  src="/assets/hero_2.jpeg"
+                  alt="Freelancing Hub notifications"
+                  className="h-full w-full object-cover object-top"
+                />
               </div>
             </div>
           </div>
@@ -1235,15 +1320,14 @@ const ConnectAnywhereReversedSection = () => (
             {/* Second larger circle (light background tone) */}
             <div className="absolute -z-10 h-[360px] w-[360px] rounded-full border border-[#1d83b3]/10 bg-gray-50" />
 
-            {/* Actual phone mockup */}
-            <div className="relative z-10 h-[430px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] p-2 shadow-2xl">
-              <div className="h-full w-full rounded-[32px] bg-white p-3">
-                <div className="mb-3 h-6 rounded-xl bg-[#1d83b3]/10" />
-                <div className="space-y-3">
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                  <div className="h-20 rounded-2xl bg-[#1d83b3]/5" />
-                </div>
+            {/* Actual phone mockup — hero_3 */}
+            <div className="relative z-10 h-[470px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] shadow-2xl">
+              <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
+                <img
+                  src="/assets/hero_3.jpeg"
+                  alt="Freelancing Hub app"
+                  className="h-full w-full object-cover object-top"
+                />
               </div>
             </div>
           </div>
@@ -1368,7 +1452,7 @@ const MentionsSection = () => (
 );
 
 const HowItWorksSection = () => (
-  <section className="py-20 relative overflow-hidden" style={{ backgroundColor: PRIMARY_SECTION_BG }} id="how-it-works">
+  <section className="py-20 relative overflow-hidden" style={{ background: HERO_GRADIENT }} id="how-it-works">
     <div className="absolute bottom-0 right-0 w-96 h-96 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 100%)' }}></div>
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
       <motion.div
@@ -2163,7 +2247,7 @@ const InterfaceSection = () => {
 };
 
 const PricingSection = () => (
-  <section className="py-12 relative overflow-hidden min-h-[90vh] flex flex-col justify-center" style={{ backgroundColor: PRIMARY_SECTION_BG }} id="pricing">
+  <section className="py-12 relative overflow-hidden min-h-[90vh] flex flex-col justify-center" style={{ background: HERO_GRADIENT }} id="pricing">
     <div className="absolute bottom-0 right-0 w-96 h-96 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 100%)' }}></div>
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 flex-1 flex flex-col justify-center">
       <motion.div
@@ -2366,7 +2450,7 @@ const FAQSection = () => {
 const CompanyFooter = () => (
   <footer
     className="relative mt-0 overflow-hidden text-slate-200"
-    style={{ backgroundColor: PRIMARY_SECTION_BG }}
+    style={{ background: HERO_GRADIENT }}
   >
     {/* Floating Blobs - Small */}
     <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
@@ -2412,38 +2496,46 @@ const CompanyFooter = () => (
             <div>
               <h3 className="mb-3 text-xl font-bold text-white">Freelance Hub</h3>
               <p className="text-sm leading-relaxed text-slate-200">
-                Freelance Hub يجمع لك فرص العمل الحر من منصّات مختلفة ويعرضها في لوحة واحدة بسيطة، مع فلاتر ذكية وتنبيهات فورية تساعدك على بناء مسارك المهني المستقل بثقة.
+                Freelance Hub brings freelance opportunities from multiple platforms into one simple dashboard, with smart filters and instant alerts to help you build your independent career with confidence.
               </p>
             </div>
 
             {/* Download Buttons with Description */}
             <div className="flex flex-col gap-3">
-              <h4 className="text-base font-bold text-white">حمّل التطبيق</h4>
+              <h4 className="text-base font-bold text-white">Download the app</h4>
               <p className="text-sm text-slate-200">
-                يمكنك العثور علينا في المتاجر التالية
+                Find us on the following stores
               </p>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <a
-                  href="#download"
-                  className="flex items-center justify-center overflow-hidden rounded-lg bg-black transition hover:opacity-90"
-                  style={{ width: '11rem', height: '3.5rem' }}
+                  href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+                  className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-black/90 px-4 py-3 text-white shadow-lg transition hover:bg-black hover:border-white/30 hover:opacity-95"
                 >
                   <img
-                    src="/assets/play.png"
-                    alt="Get it on Google Play"
-                    className="h-full w-full object-contain"
+                    src="/assets/paly.png"
+                    alt=""
+                    className="h-9 w-9 flex-shrink-0 object-contain"
+                    aria-hidden="true"
                   />
+                  <div className="text-left">
+                    <span className="block text-[10px] leading-tight text-white/80">Get it on</span>
+                    <span className="block text-sm font-semibold leading-tight">Google Play</span>
+                  </div>
                 </a>
                 <a
-                  href="#download"
-                  className="flex items-center justify-center overflow-hidden rounded-lg bg-black transition hover:opacity-90"
-                  style={{ width: '11rem', height: '3.5rem' }}
+                  href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+                  className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-gray-900 shadow-lg transition hover:bg-white hover:border-white/40 hover:opacity-95"
                 >
                   <img
                     src="/assets/store.png"
-                    alt="Download on the App Store"
-                    className="h-full w-full object-contain"
+                    alt=""
+                    className="h-9 w-9 flex-shrink-0 object-contain"
+                    aria-hidden="true"
                   />
+                  <div className="text-left">
+                    <span className="block text-[10px] leading-tight text-gray-500">Download on the</span>
+                    <span className="block text-sm font-semibold leading-tight text-gray-900">App Store</span>
+                  </div>
                 </a>
               </div>
             </div>
@@ -2451,42 +2543,42 @@ const CompanyFooter = () => (
 
           {/* Second Column - Quick Links */}
           <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
-            <h4 className="mb-4 text-lg font-bold text-white">روابط سريعة</h4>
+            <h4 className="mb-4 text-lg font-bold text-white">Quick links</h4>
             <a
               href="#how-it-works"
               className="text-sm text-slate-200 transition hover:text-[#D6F4ED]"
             >
-              خدماتنا
+              Our services
             </a>
             <a
               href="#portfolio"
               className="text-sm text-slate-200 transition hover:text-[#D6F4ED]"
             >
-              مشاريع ناجحة
+              Success stories
             </a>
             <a
               href="#team"
               className="text-sm text-slate-200 transition hover:text-[#D6F4ED]"
             >
-              فريق العمل
+              Our team
             </a>
             <a
               href="#achievements"
               className="text-sm text-slate-200 transition hover:text-[#D6F4ED]"
             >
-              إنجازاتنا
+              Our achievements
             </a>
             <a
               href="#kt_body"
               className="text-sm text-slate-200 transition hover:text-[#D6F4ED]"
             >
-              عودة للأعلى
+              Back to top
             </a>
           </div>
 
           {/* Third Column - Social Media */}
           <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
-            <h4 className="mb-4 text-lg font-bold text-white">تابعنا</h4>
+            <h4 className="mb-4 text-lg font-bold text-white">Follow us</h4>
             <div className="flex flex-col gap-2">
               <a
                 href="https://www.facebook.com/share/1Jg15YFYJy/"
@@ -2495,7 +2587,7 @@ const CompanyFooter = () => (
                 className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
               >
                 <img src="/assets/media/svg/brand-logos/facebook-4.svg" className="h-5 w-5" alt="Facebook" />
-                <span>فيسبوك</span>
+                <span>Facebook</span>
               </a>
               <a
                 href="https://www.instagram.com/magictechnologysdn?igsh=MWgwaHJxYjQzOXFjeg=="
@@ -2504,7 +2596,7 @@ const CompanyFooter = () => (
                 className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
               >
                 <img src="/assets/media/svg/brand-logos/instagram-2-1.svg" className="h-5 w-5" alt="Instagram" />
-                <span>إنستغرام</span>
+                <span>Instagram</span>
               </a>
               <a
                 href="https://tiktok.com/@magictechnology.sdn"
@@ -2513,7 +2605,7 @@ const CompanyFooter = () => (
                 className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
               >
                 <img src="/assets/media/svg/brand-logos/tiktok.svg" className="h-5 w-5" alt="TikTok" />
-                <span>تيك توك</span>
+                <span>TikTok</span>
               </a>
               <a
                 href="https://www.threads.com/@magictechnologysdn"
@@ -2522,7 +2614,7 @@ const CompanyFooter = () => (
                 className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
               >
                 <MessageCircle className="h-5 w-5 text-slate-200" />
-                <span>ثريدز</span>
+                <span>Threads</span>
               </a>
               <a
                 href="https://wa.me/message/PGKJK7664QCIM1"
@@ -2531,7 +2623,7 @@ const CompanyFooter = () => (
                 className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
               >
                 <img src="/assets/media/svg/brand-logos/whatsapp.svg" className="h-5 w-5" alt="WhatsApp" />
-                <span>واتساب</span>
+                <span>WhatsApp</span>
               </a>
             </div>
           </div>
@@ -2540,16 +2632,16 @@ const CompanyFooter = () => (
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-sm text-slate-300 sm:flex-row sm:px-6 lg:px-8">
-          <span>&copy; 2025 Freelance Hub. جميع الحقوق محفوظة.</span>
+          <span>&copy; 2025 Freelance Hub. All rights reserved.</span>
           <div className="flex gap-4">
             <a href="#how-it-works" className="transition hover:text-[#D6F4ED]">
-              عن Freelance Hub
+              About Freelance Hub
             </a>
             <a href="#contact" className="transition hover:text-[#D6F4ED]">
-              الدعم والتواصل
+              Support & contact
             </a>
             <a href="#portfolio" className="transition hover:text-[#D6F4ED]">
-              أعمالنا
+              Our work
             </a>
           </div>
         </div>
