@@ -10,7 +10,7 @@ const menuLinks = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Testimonials', href: '#testimonials' },
-  { label: 'Pricing', href: '#pricing' },
+  // { label: 'Pricing', href: '#pricing' },
 ];
 
 const partnerLogos = [
@@ -100,7 +100,7 @@ const BlobDecorator = ({ count = 2 }) => {
 const testimonials = [
   {
     title: 'Best Platform for Freelance Opportunities!',
-    quote: 'Freelancing Hub gathered all my freelance job offers from different platforms in one place. Within just two weeks, I got two steady projects without wasting time on manual searching.',
+    quote: 'FreeHub gathered all my freelance job offers from different platforms in one place. Within just two weeks, I got two steady projects without wasting time on manual searching.',
     name: 'Ahmed Ali',
     role: 'Frontend Developer',
     avatar: '/assets/media/avatars/300-1.jpg',
@@ -114,7 +114,7 @@ const testimonials = [
   },
   {
     title: 'Saves Time and Effort',
-    quote: 'Instead of tracking dozens of platforms, Freelancing Hub shows me the best opportunities with powerful filters and statistics about my rates and working hours. Planning my monthly income has become much clearer.',
+    quote: 'Instead of tracking dozens of platforms, FreeHub shows me the best opportunities with powerful filters and statistics about my rates and working hours. Planning my monthly income has become much clearer.',
     name: 'David Chen',
     role: 'Graphic Designer',
     avatar: '/assets/media/avatars/blank.png',
@@ -125,7 +125,7 @@ const whyChooseFeatures = [
   {
     icon: Check,
     title: 'All Freelance Opportunities in One Place',
-    description: 'Freelancing Hub aggregates jobs, grants, and freelance opportunities from multiple global platforms and displays them in one simple interface.',
+    description: 'FreeHub aggregates jobs, grants, and freelance opportunities from multiple global platforms and displays them in one simple interface.',
   },
   {
     icon: MessageCircle,
@@ -158,7 +158,7 @@ const howItWorksSteps = [
   {
     icon: Download,
     title: 'Download the App or Access from Browser',
-    description: 'Start for free by downloading Freelancing Hub or logging in from your browser, then connect your accounts on freelance platforms.',
+    description: 'Start for free by downloading FreeHub or logging in from your browser, then connect your accounts on freelance platforms.',
     details: [
       'Access via browser or app',
       'Create an account in minutes',
@@ -169,7 +169,7 @@ const howItWorksSteps = [
   {
     icon: Settings,
     title: 'Set Up Your Professional Profile and Preferences',
-    description: 'Define your skills and rates, and specify the types of projects you prefer so Freelancing Hub can automatically suggest the best opportunities for you.',
+    description: 'Define your skills and rates, and specify the types of projects you prefer so FreeHub can automatically suggest the best opportunities for you.',
     profileTypes: [
       { name: 'Personal Profile', icon: '👤', description: 'For individual users' },
       { name: 'Business Profile', icon: '🏢', description: 'For companies and organizations' },
@@ -628,7 +628,7 @@ const LandingHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 overflow-hidden transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         transparent ? 'border-b border-transparent' : 'border-b'
       }`}
       style={{
@@ -650,7 +650,7 @@ const LandingHeader = () => {
 
             {isMobileMenuOpen && (
               <div
-                className="absolute left-0 top-12 z-50 min-w-[200px] rounded-2xl border border-white/20"
+                className="absolute right-0 top-12 z-50 w-[220px] max-w-[90vw] rounded-2xl border border-white/20 md:w-[240px]"
                 style={{ backgroundColor: transparent ? 'rgba(0,13,26,0.95)' : STICKY_HEADER_BG }}
               >
                 <MenuLinks onItemClick={() => setMobileMenuOpen(false)} transparent={transparent} />
@@ -713,15 +713,15 @@ const HeroSection = () => {
       {/* Left: content */}
       <div className="flex flex-col text-left">
         <h1 className="mb-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
-          Find the best freelance opportunities in one place with Freelancing Hub.
+          Find the best freelance opportunities in one place with FreeHub.
         </h1>
 
         <p className="mb-8 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg lg:text-xl">
-          Freelancing Hub brings freelance jobs from multiple platforms into a single, simple dashboard with smart filters and instant alerts, helping you build a stable freelance career with confidence.
+          FreeHub brings freelance jobs from multiple platforms into a single, simple dashboard with smart filters and instant alerts, helping you build a stable freelance career with confidence.
         </p>
 
-        {/* Store download badges - icon + text, clear background */}
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:gap-6">
+        {/* Store download badges - icon + text, same row on all sizes */}
+        <div className="flex flex-row flex-wrap items-center gap-3 sm:gap-4">
           <motion.a
             href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
             className="inline-flex items-center gap-3 overflow-hidden rounded-xl border border-white/20 bg-black/90 px-4 py-3 text-white shadow-lg transition hover:bg-black hover:border-white/30"
@@ -773,7 +773,7 @@ const HeroSection = () => {
             <div className="aspect-[4/3] overflow-hidden">
               <img
                 src="/assets/hero_3.jpeg"
-                alt="Freelancing Hub projects"
+                alt="FreeHub projects"
                 className="h-full w-full object-contain object-center"
               />
             </div>
@@ -782,7 +782,7 @@ const HeroSection = () => {
           <div className="relative z-10 w-full aspect-[4/3] flex items-center justify-center min-h-[320px] sm:min-h-[380px]">
             <img
               src="/assets/hero_1.jpeg"
-              alt="Freelancing Hub app"
+              alt="FreeHub app"
               className="h-full w-full object-contain object-center object-bottom"
             />
           </div>
@@ -797,7 +797,7 @@ const HeroSection = () => {
             <div className="aspect-[4/3] overflow-hidden">
               <img
                 src="/assets/hero_2.jpeg"
-                alt="Freelancing Hub notifications"
+                alt="FreeHub notifications"
                 className="h-full w-full object-contain object-center"
               />
             </div>
@@ -823,7 +823,7 @@ const StayConnectedSection = () => (
           All Freelance Opportunities on One Screen
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Instead of manually opening dozens of freelance sites, Freelancing Hub gathers them all in one place, with smart search and filtering tools that help you reach the best opportunities with minimal time and effort.
+          Instead of manually opening dozens of freelance sites, FreeHub gathers them all in one place, with smart search and filtering tools that help you reach the best opportunities with minimal time and effort.
         </p>
       </motion.div>
 
@@ -930,7 +930,7 @@ const StayConnectedSection = () => (
               <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
                 <img
                   src="/assets/hero_1.jpeg"
-                  alt="Freelancing Hub app"
+                  alt="FreeHub app"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -1063,7 +1063,7 @@ const ConnectAnywhereSection = () => (
               <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
                 <img
                   src="/assets/hero_2.jpeg"
-                  alt="Freelancing Hub notifications"
+                  alt="FreeHub notifications"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -1325,7 +1325,7 @@ const ConnectAnywhereReversedSection = () => (
               <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
                 <img
                   src="/assets/hero_3.jpeg"
-                  alt="Freelancing Hub app"
+                  alt="FreeHub app"
                   className="h-full w-full object-cover object-top"
                 />
               </div>
@@ -1463,10 +1463,10 @@ const HowItWorksSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-white lg:text-4xl">
-          How Freelancing Hub Works to Bring You Freelance Opportunities
+          How FreeHub Works to Bring You Freelance Opportunities
         </h2>
         <p className="text-lg text-white/90 max-w-3xl mx-auto">
-          From creating an account and connecting freelance platforms, to receiving smart alerts and tracking your applications, Freelancing Hub is designed to simplify your journey to finding consistent freelance work.
+          From creating an account and connecting freelance platforms, to receiving smart alerts and tracking your applications, FreeHub is designed to simplify your journey to finding consistent freelance work.
         </p>
       </motion.div>
       <div className="grid gap-12 md:grid-cols-3">
@@ -2029,7 +2029,7 @@ const TestimonialsSection = () => (
           What Our Users Say
         </h2>
         <p className="text-lg text-gray-600">
-          Learn about the experiences of freelancers and business owners who use Freelancing Hub to find better opportunities and organize their freelance work.
+          Learn about the experiences of freelancers and business owners who use FreeHub to find better opportunities and organize their freelance work.
         </p>
       </motion.div>
       <div className="grid gap-8 md:grid-cols-3">
@@ -2075,10 +2075,10 @@ const WhyChooseSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-gray-900 lg:text-4xl">
-          Why Choose Freelancing Hub to Manage Your Freelance Work?
+          Why Choose FreeHub to Manage Your Freelance Work?
         </h2>
         <p className="text-lg text-gray-600">
-          Freelancing Hub is specifically designed for freelancers and business owners who want to manage their opportunities from multiple platforms in one simple and smart interface.
+          FreeHub is specifically designed for freelancers and business owners who want to manage their opportunities from multiple platforms in one simple and smart interface.
         </p>
       </motion.div>
       <div className="grid gap-8 md:grid-cols-3">
@@ -2258,7 +2258,7 @@ const PricingSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-white lg:text-4xl">
-          Unlock the Full Power of Freelancing Hub for Your Freelance Work
+          Unlock the Full Power of FreeHub for Your Freelance Work
         </h2>
         <div className="flex items-center justify-center mb-4">
           <div className="h-1 w-20 bg-white"></div>
@@ -2348,8 +2348,8 @@ const FAQSection = () => {
   const faqs = [
     {
       id: 1,
-      question: 'How do I get started using Freelancing Hub to find freelance work?',
-      answer: 'You can create a free account in minutes, then connect your accounts on the freelance platforms you use. After that, specify your skills and preferred fields so Freelancing Hub can automatically start bringing you suitable opportunities.',
+      question: 'How do I get started using FreeHub to find freelance work?',
+      answer: 'You can create a free account in minutes, then connect your accounts on the freelance platforms you use. After that, specify your skills and preferred fields so FreeHub can automatically start bringing you suitable opportunities.',
       link: '#'
     },
     {
@@ -2361,7 +2361,7 @@ const FAQSection = () => {
     {
       id: 3,
       question: 'Is there a free account or trial period?',
-      answer: 'Yes, you can start for free and try Freelancing Hub\'s basic features for tracking opportunities and saving jobs. You can also upgrade later to the paid plan to get smarter alerts and advanced statistics.',
+      answer: 'Yes, you can start for free and try FreeHub\'s basic features for tracking opportunities and saving jobs. You can also upgrade later to the paid plan to get smarter alerts and advanced statistics.',
       link: '#'
     },
     {
@@ -2373,7 +2373,7 @@ const FAQSection = () => {
     {
       id: 5,
       question: 'I don\'t see suitable opportunities, what should I do?',
-      answer: 'We recommend reviewing your preferences and the rate limits you\'ve set, and expanding the range of skills or countries you\'re willing to work with. The more flexible your settings, the more opportunities Freelancing Hub can suggest to you.',
+      answer: 'We recommend reviewing your preferences and the rate limits you\'ve set, and expanding the range of skills or countries you\'re willing to work with. The more flexible your settings, the more opportunities FreeHub can suggest to you.',
       link: '#'
     }
   ];
@@ -2494,9 +2494,9 @@ const CompanyFooter = () => (
           <div className="flex flex-col gap-6 lg:col-span-1">
             {/* Description */}
             <div>
-              <h3 className="mb-3 text-xl font-bold text-white">Freelance Hub</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">FreeHub</h3>
               <p className="text-sm leading-relaxed text-slate-200">
-                Freelance Hub brings freelance opportunities from multiple platforms into one simple dashboard, with smart filters and instant alerts to help you build your independent career with confidence.
+                FreeHub brings freelance opportunities from multiple platforms into one simple dashboard, with smart filters and instant alerts to help you build your independent career with confidence.
               </p>
             </div>
 
@@ -2506,7 +2506,7 @@ const CompanyFooter = () => (
               <p className="text-sm text-slate-200">
                 Find us on the following stores
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <div className="flex flex-row flex-wrap gap-3 sm:gap-4">
                 <a
                   href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
                   className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-black/90 px-4 py-3 text-white shadow-lg transition hover:bg-black hover:border-white/30 hover:opacity-95"
@@ -2632,10 +2632,10 @@ const CompanyFooter = () => (
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-sm text-slate-300 sm:flex-row sm:px-6 lg:px-8">
-          <span>&copy; 2025 Freelance Hub. All rights reserved.</span>
+          <span>&copy; 2025 FreeHub. All rights reserved.</span>
           <div className="flex gap-4">
             <a href="#how-it-works" className="transition hover:text-[#D6F4ED]">
-              About Freelance Hub
+              About FreeHub
             </a>
             <a href="#contact" className="transition hover:text-[#D6F4ED]">
               Support & contact
@@ -2694,14 +2694,14 @@ function LandingPage() {
   // SEO: Update document title and meta tags
   useEffect(() => {
     // Update document title
-    document.title = 'Freelancing Hub - Find and organize your freelance work opportunities';
+    document.title = 'FreeHub - Find and organize your freelance work opportunities';
 
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
         'content',
-        'Freelancing Hub helps freelancers and independent professionals find, organize, and track work opportunities from multiple freelance platforms in one smart dashboard.'
+        'FreeHub helps freelancers and independent professionals find, organize, and track work opportunities from multiple freelance platforms in one smart dashboard.'
       );
     }
 
@@ -2710,7 +2710,7 @@ function LandingPage() {
     if (ogTitle) {
       ogTitle.setAttribute(
         'content',
-        'Freelancing Hub - All your freelance work opportunities in one place'
+        'FreeHub - All your freelance work opportunities in one place'
       );
     }
 
@@ -2747,7 +2747,7 @@ function LandingPage() {
         <ConnectAnywhereReversedSection />
         <TestimonialsSection />
         <WhyChooseSection />
-        <PricingSection />
+        {/* <PricingSection /> */}
         <FAQSection />
         <CompanyFooter />
         <ScrollTop />
