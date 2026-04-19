@@ -99,25 +99,25 @@ const BlobDecorator = ({ count = 2 }) => {
 
 const testimonials = [
   {
-    title: 'Best Platform for Freelance Opportunities!',
-    quote: 'FreeHub gathered all my freelance job offers from different platforms in one place. Within just two weeks, I got two steady projects without wasting time on manual searching.',
-    name: 'Ahmed Ali',
-    role: 'Frontend Developer',
-    avatar: '/assets/media/avatars/300-1.jpg',
+    title: 'تطبيق مفيد',
+    quote: 'شكراً جزيلاً.',
+    name: 'Sue Kids',
+    role: '',
+    avatar: '/assets/media/avatars/review1.jpg',
   },
   {
-    title: 'Smart Alerts and Real Opportunities',
-    quote: 'I receive alerts for jobs that match my skills as soon as they\'re posted on freelance platforms. I no longer need to open each site separately - everything appears in one dashboard.',
-    name: 'Sara Johnson',
-    role: 'Content Writer',
-    avatar: '/assets/media/avatars/300-2.jpg',
+    title: 'تجربة ممتازة',
+    quote: 'لقيت عمل بعد 3 ساعات بس من تحميل التطبيق و بعد ما اشتغلت على بروفايلي كويس. Good job 👏.',
+    name: 'Mohammed Dawoud',
+    role: 'Software Engineer',
+    avatar: '/assets/media/avatars/review2.jpg',
   },
   {
-    title: 'Saves Time and Effort',
-    quote: 'Instead of tracking dozens of platforms, FreeHub shows me the best opportunities with powerful filters and statistics about my rates and working hours. Planning my monthly income has become much clearer.',
-    name: 'David Chen',
-    role: 'Graphic Designer',
-    avatar: '/assets/media/avatars/blank.png',
+    title: 'التطبيق مفيد جدا لمجال العمل الحر',
+    quote: ' فكرة جمع المشاريع من عدة منصات مثل Freelancer Upwork ومستقل في مكان واحد بتوفر وقت وجهد كبيرين بدل التنقل بين المواقع. يجمع المشاريع من أكثر من منصة في مكان واحد ويوفر وقت کبیر بدل التنقل بينها والإشعارات الفورية ميزة ممتازة لأنها تساعدك تقدم على المشاريع بسرعة. تجربة استخدام جميلة وبسيطة.',
+    name: 'Mohammed Adil',
+    role: 'Mobile Developer',
+    avatar: '/assets/media/avatars/review3.jpg',
   },
 ];
 
@@ -740,7 +740,7 @@ const HeroSection = () => {
             </div>
           </motion.a>
           <motion.a
-            href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+            href="https://apps.apple.com/us/app/freehub/id6760947105"
             className="inline-flex items-center gap-3 overflow-hidden rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-gray-900 shadow-lg transition hover:bg-white hover:border-white/40"
             whileHover={{ scale: 1.02, opacity: 0.95 }}
             whileTap={{ scale: 0.98 }}
@@ -772,16 +772,16 @@ const HeroSection = () => {
           >
             <div className="aspect-[4/3] overflow-hidden">
               <img
-                src="/assets/hero_3.jpeg"
+                src="/assets/hero_1.jpeg"
                 alt="FreeHub projects"
                 className="h-full w-full object-contain object-center"
               />
             </div>
           </div>
           {/* hero_1 — main, upright, bottom-aligned */}
-          <div className="relative z-10 w-full aspect-[4/3] flex items-center justify-center min-h-[320px] sm:min-h-[380px]">
+          <div className="relative z-10 w-full aspect-[5/3] flex items-center justify-center min-h-[320px] sm:min-h-[380px]">
             <img
-              src="/assets/hero_1.jpeg"
+              src="/assets/hero_3.jpeg"
               alt="FreeHub app"
               className="h-full w-full object-contain object-center object-bottom"
             />
@@ -1324,7 +1324,7 @@ const ConnectAnywhereReversedSection = () => (
             <div className="relative z-10 h-[470px] w-[230px] rounded-[40px] bg-gradient-to-br from-[#1d83b3] to-[#156a8f] shadow-2xl">
               <div className="h-full w-full rounded-[32px] overflow-hidden bg-white">
                 <img
-                  src="/assets/hero_3.jpeg"
+                  src="/assets/hero_1.jpeg"
                   alt="FreeHub app"
                   className="h-full w-full object-cover object-top"
                 />
@@ -2577,56 +2577,67 @@ const CompanyFooter = () => (
           </div>
 
           {/* Third Column - Social Media */}
-          <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
-            <h4 className="mb-4 text-lg font-bold text-white">Follow us</h4>
-            <div className="flex flex-col gap-2">
-              <a
-                href="https://www.facebook.com/share/1Jg15YFYJy/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
-              >
-                <img src="/assets/media/svg/brand-logos/facebook-4.svg" className="h-5 w-5" alt="Facebook" />
-                <span>Facebook</span>
-              </a>
-              <a
-                href="https://www.instagram.com/magictechnologysdn?igsh=MWgwaHJxYjQzOXFjeg=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
-              >
-                <img src="/assets/media/svg/brand-logos/instagram-2-1.svg" className="h-5 w-5" alt="Instagram" />
-                <span>Instagram</span>
-              </a>
-              <a
-                href="https://tiktok.com/@magictechnology.sdn"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
-              >
-                <img src="/assets/media/svg/brand-logos/tiktok.svg" className="h-5 w-5" alt="TikTok" />
-                <span>TikTok</span>
-              </a>
-              <a
-                href="https://www.threads.com/@magictechnologysdn"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
-              >
-                <MessageCircle className="h-5 w-5 text-slate-200" />
-                <span>Threads</span>
-              </a>
-              <a
-                href="https://wa.me/message/PGKJK7664QCIM1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
-              >
-                <img src="/assets/media/svg/brand-logos/whatsapp.svg" className="h-5 w-5" alt="WhatsApp" />
-                <span>WhatsApp</span>
-              </a>
-            </div>
-          </div>
+        <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
+  <h4 className="mb-4 text-lg font-bold text-white">Follow us</h4>
+  <div className="flex flex-col gap-2">
+    
+    {/* أولاً: LinkedIn */}
+    <a
+      href="https://www.linkedin.com/company/112807026/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
+    >
+      <img src="/assets/media/svg/brand-logos/LinkedIn2.svg" className="h-5 w-5" alt="LinkedIn" />
+      <span>LinkedIn</span>
+    </a>
+
+    {/* ثانياً: Instagram */}
+    <a
+      href="https://www.instagram.com/freehub_app?igsh=MXMyemVtd3h5OTFraw%3D%3D"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
+    >
+      <img src="/assets/media/svg/brand-logos/instagram-2-1.svg" className="h-5 w-5" alt="Instagram" />
+      <span>Instagram</span>
+    </a>
+
+    {/* ثالثاً: Facebook */}
+    <a
+      href="https://www.facebook.com/people/FreeHub/61586246439682"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
+    >
+      <img src="/assets/media/svg/brand-logos/facebook-4.svg" className="h-5 w-5" alt="Facebook" />
+      <span>Facebook</span>
+    </a>
+
+    {/* رابعاً: TikTok */}
+    <a
+      href="https://www.tiktok.com/@free_hub_app?_r=1&_t=ZS-94xjAdN7nWv"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
+    >
+      <img src="/assets/media/svg/brand-logos/tiktok.svg" className="h-5 w-5" alt="TikTok" />
+      <span>TikTok</span>
+    </a>
+
+    {/* خامساً: X (Twitter) */}
+    <a
+      href="https://x.com/hub_free8426?t=_bpOaZ3xfhFAw1C5O2OYjA&s=09"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 text-sm text-slate-200 transition hover:text-[#D6F4ED]"
+    >
+      <img src="/assets/media/svg/brand-logos/twitter.svg" className="h-5 w-5" alt="X(twitter)" />
+      <span>X</span>
+    </a>
+
+  </div>
+</div>
         </div>
       </div>
 
