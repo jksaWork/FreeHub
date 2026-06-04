@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import translations from './translations';
 import { Briefcase, ChevronUp, LineChart, Menu, ShoppingBasket, MessageCircle, Check, ArrowRight, Download, Settings, Rocket, MapPin, Zap, Shield, Languages, Bell, Filter, ClipboardList, User, Phone, PhoneCall, Smartphone } from 'lucide-react';
 import Slider from 'react-slick';
 import { motion } from 'framer-motion';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const menuLinks = [
-  { label: 'Home', href: '#home', isActive: true },
-  { label: 'Features', href: '#features' },
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Testimonials', href: '#testimonials' },
-  // { label: 'Pricing', href: '#pricing' },
+const LanguageContext = createContext({ lang: 'en', setLang: () => {} });
+const useLang = () => useContext(LanguageContext);
+
+const getMenuLinks = (t) => [
+  { label: t.nav.home, href: '#home', isActive: true },
+  { label: t.nav.features, href: '#features' },
+  { label: t.nav.howItWorks, href: '#how-it-works' },
+  { label: t.nav.testimonials, href: '#testimonials' },
 ];
 
 const partnerLogos = [
@@ -121,78 +124,54 @@ const testimonials = [
   },
 ];
 
-const whyChooseFeatures = [
+const getWhyChooseFeatures = (t) => [
   {
     icon: Check,
-    title: 'All Freelance Opportunities in One Place',
-    description: 'FreeHub aggregates jobs, grants, and freelance opportunities from multiple global platforms and displays them in one simple interface.',
+    title: t.whyChoose.feature1Title,
+    description: t.whyChoose.feature1Desc,
   },
   {
     icon: MessageCircle,
-    title: 'Instant Alerts and Opportunities',
-    description: 'Receive instant notifications when jobs matching your skills or field are posted, so you never miss an opportunity.',
+    title: t.whyChoose.feature2Title,
+    description: t.whyChoose.feature2Desc,
   },
   {
     icon: Shield,
-    title: 'Filter Reliable Jobs',
-    description: 'We help you focus on serious clients through advanced filters for credibility, budget, and contract type.',
+    title: t.whyChoose.feature3Title,
+    description: t.whyChoose.feature3Desc,
   },
   {
     icon: MapPin,
-    title: 'Remote or Location-Based Opportunities',
-    description: 'Choose between remote jobs or those specified by country/region according to your preferred working style.',
+    title: t.whyChoose.feature4Title,
+    description: t.whyChoose.feature4Desc,
   },
   {
     icon: Settings,
-    title: 'Flexible Dashboard',
-    description: 'Adjust your preferences, work fields, and set a minimum rate so only the most suitable opportunities appear.',
+    title: t.whyChoose.feature5Title,
+    description: t.whyChoose.feature5Desc,
   },
   {
     icon: Languages,
-    title: 'Multi-Language and Market Support',
-    description: 'Track jobs posted in different languages and markets, with an interface supporting multiple languages.',
+    title: t.whyChoose.feature6Title,
+    description: t.whyChoose.feature6Desc,
   },
 ];
 
-const howItWorksSteps = [
+const getHowItWorksSteps = (t) => [
   {
     icon: Download,
-    title: 'Download the App or Access from Browser',
-    description: 'Start for free by downloading FreeHub or logging in from your browser, then connect your accounts on freelance platforms.',
-    details: [
-      'Access via browser or app',
-      'Create an account in minutes',
-      'Connect your accounts on freelance platforms',
-      'Initial sync of job opportunities matching your field'
-    ]
+    title: t.howItWorks.step1Title,
+    description: t.howItWorks.step1Desc,
   },
   {
     icon: Settings,
-    title: 'Set Up Your Professional Profile and Preferences',
-    description: 'Define your skills and rates, and specify the types of projects you prefer so FreeHub can automatically suggest the best opportunities for you.',
-    profileTypes: [
-      { name: 'Personal Profile', icon: '👤', description: 'For individual users' },
-      { name: 'Business Profile', icon: '🏢', description: 'For companies and organizations' },
-      { name: 'Creator Profile', icon: '🎨', description: 'For content creators' },
-      { name: 'Developer Profile', icon: '💻', description: 'For developers and tech professionals' }
-    ],
-    details: [
-      'Choose account type (freelancer, small company, freelance team)',
-      'Specify core skills and experience',
-      'Add preferred rate ranges',
-      'Customize job alerts by field and platform'
-    ]
+    title: t.howItWorks.step2Title,
+    description: t.howItWorks.step2Desc,
   },
   {
     icon: Rocket,
-    title: 'Start Applying to the Best Opportunities',
-    description: 'Use the dashboard to track your applications, save favorite jobs, and compare offers to achieve stable income.',
-    details: [
-      'Browse job opportunities from multiple platforms on one page',
-      'Save jobs and get reminders for deadlines and applications',
-      'Compare offers by budget, duration, and ratings',
-      'Track your income statistics and sources over time'
-    ]
+    title: t.howItWorks.step3Title,
+    description: t.howItWorks.step3Desc,
   },
 ];
 
@@ -545,30 +524,34 @@ const projectImageSources = projectTabs.flatMap(({ blocks }) =>
   })
 );
 
-const MenuLinks = ({ className = '', onItemClick, menuId, transparent }) => (
-  <nav
-    className={`flex flex-col gap-2 text-sm font-semibold text-white md:flex-row md:items-center ${className}`}
-    id={menuId}
-  >
-    {menuLinks.map(({ label, href, isActive }) => (
-      <a
-        key={href}
-        href={href}
-        onClick={onItemClick}
-        className={`rounded-full px-4 py-2 transition-colors duration-150 ${
-          isActive
-            ? transparent
-              ? 'text-white bg-white/20 shadow'
-              : 'text-gray-900 shadow'
-            : 'text-white/90 hover:text-[#1d83b3] hover:bg-white/10'
-        }`}
-        style={isActive && !transparent ? { backgroundColor: SECONDARY_COLOR } : {}}
-      >
-        {label}
-      </a>
-    ))}
-  </nav>
-);
+const MenuLinks = ({ className = '', onItemClick, menuId, transparent }) => {
+  const { t } = useLang();
+  const menuLinks = getMenuLinks(t);
+  return (
+    <nav
+      className={`flex flex-col gap-2 text-sm font-semibold text-white md:flex-row md:items-center ${className}`}
+      id={menuId}
+    >
+      {menuLinks.map(({ label, href, isActive }) => (
+        <a
+          key={href}
+          href={href}
+          onClick={onItemClick}
+          className={`rounded-full px-4 py-2 transition-colors duration-150 ${
+            isActive
+              ? transparent
+                ? 'text-white bg-white/20 shadow'
+                : 'text-gray-900 shadow'
+              : 'text-white/90 hover:text-[#1d83b3] hover:bg-white/10'
+          }`}
+          style={isActive && !transparent ? { backgroundColor: SECONDARY_COLOR } : {}}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  );
+};
 
 const MenuToggleButton = ({ isOpen, onToggle }) => {
   const handleKeyDown = (event) => {
@@ -595,10 +578,35 @@ const MenuToggleButton = ({ isOpen, onToggle }) => {
   );
 };
 
+const LangToggle = ({ transparent }) => {
+  const { lang, setLang } = useLang();
+  const isAr = lang === 'ar';
+  
+  return (
+    <button
+      type="button"
+      onClick={() => setLang(isAr ? 'en' : 'ar')}
+      // تم إضافة !bg-transparent لضمان كسر أي خلفية بيضاء موروثة في حالة الـ transparent
+      className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold shadow transition ${
+        transparent 
+          ? '!bg-transparent text-white border-2 border-white/80 hover:bg-white/10' 
+          : 'text-gray-900'
+      }`}
+      style={transparent ? { backgroundColor: 'transparent' } : { backgroundColor: SECONDARY_COLOR }}
+      onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+      aria-label={isAr ? 'Switch to English' : 'التبديل إلى العربية'}
+    >
+      {isAr ? 'EN' : 'AR'}
+    </button>
+  );
+};
+
 const LandingHeader = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setScrolled] = useState(false);
   const menuWrapperRef = useRef(null);
+  const { t } = useLang();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -654,6 +662,10 @@ const LandingHeader = () => {
                 style={{ backgroundColor: transparent ? 'rgba(0,13,26,0.95)' : STICKY_HEADER_BG }}
               >
                 <MenuLinks onItemClick={() => setMobileMenuOpen(false)} transparent={transparent} />
+                {/* تم تعديل الحاوية هنا في قائمة الموبايل لكي يتناسق الزر وتختفي الخلفيات العشوائية */}
+                <div className="px-4 pb-4 flex justify-center bg-transparent">
+                  <LangToggle transparent={transparent} />
+                </div>
               </div>
             )}
           </div>
@@ -663,7 +675,11 @@ const LandingHeader = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex md:justify-end ml-4">
+        {/* أزرار الشاشات الكبيرة */}
+        <div className="hidden md:flex md:items-center md:justify-end gap-3 ml-4 bg-transparent">
+          {/* استدعاء مباشر بدون divs مغلفة قد تحمل خواص خلفية بيضاء */}
+          <LangToggle transparent={transparent} />
+          
           <a
             href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
             className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold shadow transition ${
@@ -673,7 +689,7 @@ const LandingHeader = () => {
             onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
             onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
           >
-            Download Now
+            {t.nav.downloadNow}
           </a>
         </div>
       </div>
@@ -682,6 +698,7 @@ const LandingHeader = () => {
 };
 
 const HeroSection = () => {
+  const { t } = useLang();
   return (
   <section
     className="relative flex w-full flex-col items-center overflow-hidden px-4 pt-12 pb-12 sm:px-6 lg:px-8"
@@ -711,13 +728,13 @@ const HeroSection = () => {
     {/* Two-column: content left, picture space right */}
     <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16 mt-20">
       {/* Left: content */}
-      <div className="flex flex-col text-left">
+      <div className="flex flex-col text-start">
         <h1 className="mb-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
-          Find the best freelance opportunities in one place with FreeHub.
+          {t.hero.heading}
         </h1>
 
         <p className="mb-8 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg lg:text-xl">
-          FreeHub brings freelance jobs from multiple platforms into a single, simple dashboard with smart filters and instant alerts, helping you build a stable freelance career with confidence.
+          {t.hero.subheading}
         </p>
 
         {/* Store download badges - icon + text, same row on all sizes */}
@@ -734,9 +751,9 @@ const HeroSection = () => {
               className="h-9 w-9 flex-shrink-0 object-contain"
               aria-hidden="true"
             />
-            <div className="text-left">
-              <span className="block text-[10px] leading-tight text-white/80">Get it on</span>
-              <span className="block text-sm font-semibold leading-tight">Google Play</span>
+            <div className="text-start">
+              <span className="block text-[10px] leading-tight text-white/80">{t.hero.getItOn}</span>
+              <span className="block text-sm font-semibold leading-tight">{t.hero.googlePlay}</span>
             </div>
           </motion.a>
           <motion.a
@@ -751,9 +768,9 @@ const HeroSection = () => {
               className="h-9 w-9 flex-shrink-0 object-contain"
               aria-hidden="true"
             />
-            <div className="text-left">
-              <span className="block text-[10px] leading-tight text-gray-500">Download on the</span>
-              <span className="block text-sm font-semibold leading-tight text-gray-900">App Store</span>
+            <div className="text-start">
+              <span className="block text-[10px] leading-tight text-gray-500">{t.hero.downloadOnThe}</span>
+              <span className="block text-sm font-semibold leading-tight text-gray-900">{t.hero.appStore}</span>
             </div>
           </motion.a>
         </div>
@@ -809,7 +826,9 @@ const HeroSection = () => {
   );
 };
 
-const StayConnectedSection = () => (
+const StayConnectedSection = () => {
+  const { t } = useLang();
+  return (
   <section className="relative z-20 bg-white pb-16 pt-16 lg:pb-24" id="features">
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -820,10 +839,10 @@ const StayConnectedSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-3 text-3xl font-extrabold text-gray-900 lg:text-5xl">
-          All Freelance Opportunities on One Screen
+          {t.features.heading}
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Instead of manually opening dozens of freelance sites, FreeHub gathers them all in one place, with smart search and filtering tools that help you reach the best opportunities with minimal time and effort.
+          {t.features.subheading}
         </p>
       </motion.div>
 
@@ -845,12 +864,12 @@ const StayConnectedSection = () => (
                   <Briefcase className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-xs font-semibold text-gray-900">
-                  Jobs from Multiple Platforms
+                  {t.features.card1Title}
                 </h3>
                 <p className="mt-1 text-[10px] text-gray-600 leading-relaxed">
-                  Track the latest freelance opportunities from major global platforms without manually switching between them.
+                  {t.features.card1Desc}
                 </p>
               </div>
             </div>
@@ -870,12 +889,12 @@ const StayConnectedSection = () => (
                   <Bell className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-base font-semibold text-gray-900">
-                  Instant Alerts for Matching Opportunities
+                  {t.features.card2Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Don't miss new opportunities; receive instant notifications when jobs matching your skills and field are posted.
+                  {t.features.card2Desc}
                 </p>
               </div>
             </div>
@@ -895,12 +914,12 @@ const StayConnectedSection = () => (
                   <Filter className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-xs font-semibold text-gray-900">
-                  Advanced Search Filters
+                  {t.features.card3Title}
                 </h3>
                 <p className="mt-1 text-[10px] text-gray-600 leading-relaxed">
-                  Use filters by budget, contract type, project duration, or required experience to reach the best opportunities.
+                  {t.features.card3Desc}
                 </p>
               </div>
             </div>
@@ -954,12 +973,12 @@ const StayConnectedSection = () => (
                   <ClipboardList className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-xs font-semibold text-gray-900">
-                  Organize Job Offers in One Place
+                  {t.features.card4Title}
                 </h3>
                 <p className="mt-1 text-[10px] text-gray-600 leading-relaxed">
-                  Organize applications and track the status of each job offer and submission date easily within one dashboard.
+                  {t.features.card4Desc}
                 </p>
               </div>
             </div>
@@ -979,12 +998,12 @@ const StayConnectedSection = () => (
                   <User className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-base font-semibold text-gray-900">
-                  Multiple Professional Profiles
+                  {t.features.card5Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Create multiple professional profiles (technical, creative, consulting...) and easily target different types of clients.
+                  {t.features.card5Desc}
                 </p>
               </div>
             </div>
@@ -1004,12 +1023,12 @@ const StayConnectedSection = () => (
                   <MapPin className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Flexible Work from Anywhere
+                  {t.features.card6Title}
                 </h3>
                 <p className="mt-1 text-[11px] text-gray-600 leading-relaxed">
-                  Work from anywhere and anytime, with full synchronization between phone and computer and save your favorite opportunities.
+                  {t.features.card6Desc}
                 </p>
               </div>
             </div>
@@ -1018,9 +1037,12 @@ const StayConnectedSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
-const ConnectAnywhereSection = () => (
+const ConnectAnywhereSection = () => {
+  const { t } = useLang();
+  return (
   <section className="relative z-20 bg-gray-50 pb-16 pt-16 lg:pb-24">
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -1031,10 +1053,10 @@ const ConnectAnywhereSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-3 text-3xl font-extrabold text-gray-900 lg:text-5xl">
-          Stay Connected to Opportunities Anytime, Anywhere
+          {t.connectAnywhere.heading}
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Access your freelance opportunities on the go with our mobile app. Get instant notifications, respond to opportunities quickly, and manage your freelance career from your smartphone or tablet.
+          {t.connectAnywhere.subheading}
         </p>
       </motion.div>
 
@@ -1087,12 +1109,12 @@ const ConnectAnywhereSection = () => (
                   <Smartphone className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Mobile App Access
+                  {t.connectAnywhere.card1Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Download our mobile app for iOS and Android to access your opportunities wherever you are, with full sync across all devices.
+                  {t.connectAnywhere.card1Desc}
                 </p>
               </div>
             </div>
@@ -1112,12 +1134,12 @@ const ConnectAnywhereSection = () => (
                   <PhoneCall className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Instant Notifications
+                  {t.connectAnywhere.card2Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Receive push notifications on your phone the moment new opportunities matching your profile are posted on any platform.
+                  {t.connectAnywhere.card2Desc}
                 </p>
               </div>
             </div>
@@ -1137,12 +1159,12 @@ const ConnectAnywhereSection = () => (
                   <Phone className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Quick Response
+                  {t.connectAnywhere.card3Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Respond to opportunities instantly from your phone. Apply, save, or share opportunities with just a few taps.
+                  {t.connectAnywhere.card3Desc}
                 </p>
               </div>
             </div>
@@ -1162,12 +1184,12 @@ const ConnectAnywhereSection = () => (
                   <Zap className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Offline Mode
+                  {t.connectAnywhere.card4Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Access saved opportunities even without internet connection. Your data syncs automatically when you're back online.
+                  {t.connectAnywhere.card4Desc}
                 </p>
               </div>
             </div>
@@ -1176,9 +1198,12 @@ const ConnectAnywhereSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
-const ConnectAnywhereReversedSection = () => (
+const ConnectAnywhereReversedSection = () => {
+  const { t } = useLang();
+  return (
   <section className="relative z-20 bg-white pb-16 pt-16 lg:pb-24">
     <BlobDecorator count={2} />
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -1190,10 +1215,10 @@ const ConnectAnywhereReversedSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-3 text-3xl font-extrabold text-gray-900 lg:text-5xl">
-          Manage Your Freelance Career on the Go
+          {t.connectReversed.heading}
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Take control of your freelance opportunities wherever you are. Our powerful mobile platform keeps you connected to the best projects and helps you grow your freelance business seamlessly.
+          {t.connectReversed.subheading}
         </p>
       </motion.div>
 
@@ -1215,12 +1240,12 @@ const ConnectAnywhereReversedSection = () => (
                   <Rocket className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Fast Application Process
+                  {t.connectReversed.card1Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Apply to opportunities in seconds with pre-filled templates and quick submission forms. Never miss a deadline again.
+                  {t.connectReversed.card1Desc}
                 </p>
               </div>
             </div>
@@ -1240,12 +1265,12 @@ const ConnectAnywhereReversedSection = () => (
                   <LineChart className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Track Your Progress
+                  {t.connectReversed.card2Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Monitor your applications, track your success rate, and analyze your freelance performance with detailed statistics and insights.
+                  {t.connectReversed.card2Desc}
                 </p>
               </div>
             </div>
@@ -1265,12 +1290,12 @@ const ConnectAnywhereReversedSection = () => (
                   <Shield className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Secure & Private
+                  {t.connectReversed.card3Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Your data is encrypted and secure. We protect your personal information and ensure your freelance activities remain private.
+                  {t.connectReversed.card3Desc}
                 </p>
               </div>
             </div>
@@ -1290,12 +1315,12 @@ const ConnectAnywhereReversedSection = () => (
                   <Settings className="h-5 w-5 text-white" />
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Customizable Settings
+                  {t.connectReversed.card4Title}
                 </h3>
                 <p className="mt-1 text-xs text-gray-600 leading-relaxed">
-                  Personalize your experience with customizable filters, notification preferences, and dashboard layouts that suit your workflow.
+                  {t.connectReversed.card4Desc}
                 </p>
               </div>
             </div>
@@ -1335,7 +1360,8 @@ const ConnectAnywhereReversedSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const MoreProductivitySection = () => (
   <section className="relative bg-white pb-16 pt-16">
@@ -1451,7 +1477,10 @@ const MentionsSection = () => (
   </section>
 );
 
-const HowItWorksSection = () => (
+const HowItWorksSection = () => {
+  const { t } = useLang();
+  const howItWorksSteps = getHowItWorksSteps(t);
+  return (
   <section className="py-20 relative overflow-hidden" style={{ background: HERO_GRADIENT }} id="how-it-works">
     <div className="absolute bottom-0 right-0 w-96 h-96 pointer-events-none" style={{ background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 100%)' }}></div>
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1463,10 +1492,10 @@ const HowItWorksSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-white lg:text-4xl">
-          How FreeHub Works to Bring You Freelance Opportunities
+          {t.howItWorks.heading}
         </h2>
         <p className="text-lg text-white/90 max-w-3xl mx-auto">
-          From creating an account and connecting freelance platforms, to receiving smart alerts and tracking your applications, FreeHub is designed to simplify your journey to finding consistent freelance work.
+          {t.howItWorks.subheading}
         </p>
       </motion.div>
       <div className="grid gap-12 md:grid-cols-3">
@@ -1496,7 +1525,8 @@ const HowItWorksSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const StatisticsSection = () => (
   <section className="relative overflow-hidden bg-slate-950 py-16 text-center text-slate-50 lg:py-24 section-dark" id="achievements">
@@ -2014,7 +2044,9 @@ const ProjectsSection = () => (
   </section>
 );
 
-const TestimonialsSection = () => (
+const TestimonialsSection = () => {
+  const { t } = useLang();
+  return (
   <section className="relative bg-white py-20" id="testimonials">
     <BlobDecorator count={2} />
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -2026,10 +2058,10 @@ const TestimonialsSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-gray-900 lg:text-4xl">
-          What Our Users Say
+          {t.testimonials.heading}
         </h2>
         <p className="text-lg text-gray-600">
-          Learn about the experiences of freelancers and business owners who use FreeHub to find better opportunities and organize their freelance work.
+          {t.testimonials.subheading}
         </p>
       </motion.div>
       <div className="grid gap-8 md:grid-cols-3">
@@ -2061,9 +2093,13 @@ const TestimonialsSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
-const WhyChooseSection = () => (
+const WhyChooseSection = () => {
+  const { t } = useLang();
+  const whyChooseFeatures = getWhyChooseFeatures(t);
+  return (
   <section className="relative bg-gray-50 py-20">
     <BlobDecorator count={2} />
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -2075,10 +2111,10 @@ const WhyChooseSection = () => (
         transition={{ duration: 0.6 }}
       >
         <h2 className="mb-4 text-3xl font-extrabold text-gray-900 lg:text-4xl">
-          Why Choose FreeHub to Manage Your Freelance Work?
+          {t.whyChoose.heading}
         </h2>
         <p className="text-lg text-gray-600">
-          FreeHub is specifically designed for freelancers and business owners who want to manage their opportunities from multiple platforms in one simple and smart interface.
+          {t.whyChoose.subheading}
         </p>
       </motion.div>
       <div className="grid gap-8 md:grid-cols-3">
@@ -2101,7 +2137,8 @@ const WhyChooseSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const InterfaceSection = () => {
   const sliderSettings = {
@@ -2289,7 +2326,7 @@ const PricingSection = () => (
           <ul className="list-none space-y-3 mb-8 text-left">
             <li className="py-3 border-b border-gray-200 text-gray-700">Basic alerts for freelance opportunities matching your skills</li>
             <li className="py-3 border-b border-gray-200 text-gray-700">Connect with multiple popular freelance platforms</li>
-            <li className="py-3 border-b border-gray-200 text-gray-700">Save unlimited favorite jobs</li>
+            <li className="py-3 border-b border-gray-200 text-gray-700">Save unlimited favorite projects</li>
             <li className="py-3 text-gray-700">One dashboard to track all applications</li>
           </ul>
           <button 
@@ -2344,38 +2381,14 @@ const PricingSection = () => (
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(1);
+  const { t } = useLang();
 
   const faqs = [
-    {
-      id: 1,
-      question: 'How do I get started using FreeHub to find freelance work?',
-      answer: 'You can create a free account in minutes, then connect your accounts on the freelance platforms you use. After that, specify your skills and preferred fields so FreeHub can automatically start bringing you suitable opportunities.',
-      link: '#'
-    },
-    {
-      id: 2,
-      question: 'How do I edit my professional profile and opportunity preferences?',
-      answer: 'You can easily edit your data from the settings page within the app, whether it\'s skills, fields, language, or rate limits. Every change you make is immediately reflected in the quality of opportunities you receive alerts for.',
-      link: '#'
-    },
-    {
-      id: 3,
-      question: 'Is there a free account or trial period?',
-      answer: 'Yes, you can start for free and try FreeHub\'s basic features for tracking opportunities and saving jobs. You can also upgrade later to the paid plan to get smarter alerts and advanced statistics.',
-      link: '#'
-    },
-    {
-      id: 4,
-      question: 'Can I get help if I encounter a problem?',
-      answer: 'Absolutely. You can contact us from within the app or via the dedicated support email. Our team is ready to help you with any inquiry related to connecting platforms, alerts, or setting up your professional profile.',
-      link: '#'
-    },
-    {
-      id: 5,
-      question: 'I don\'t see suitable opportunities, what should I do?',
-      answer: 'We recommend reviewing your preferences and the rate limits you\'ve set, and expanding the range of skills or countries you\'re willing to work with. The more flexible your settings, the more opportunities FreeHub can suggest to you.',
-      link: '#'
-    }
+    { id: 1, question: t.faq.q1, answer: t.faq.a1 },
+    { id: 2, question: t.faq.q2, answer: t.faq.a2 },
+    { id: 3, question: t.faq.q3, answer: t.faq.a3 },
+    { id: 4, question: t.faq.q4, answer: t.faq.a4 },
+    { id: 5, question: t.faq.q5, answer: t.faq.a5 },
   ];
 
   return (
@@ -2390,13 +2403,13 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="mb-4 text-3xl font-extrabold text-gray-900 lg:text-4xl">
-            Frequently Asked Questions
+            {t.faq.heading}
           </h2>
           <div className="flex items-center justify-center mb-4">
             <div className="h-1 w-20 bg-[#1d83b3]"></div>
           </div>
           <p className="text-lg text-gray-600">
-            Find answers to the most common questions, covering everything from setup to advanced features, to help you get the most out of the platform.
+            {t.faq.subheading}
           </p>
         </motion.div>
         <div className="space-y-4">
@@ -2410,11 +2423,11 @@ const FAQSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <button
-                className="w-full px-6 py-4 text-left bg-gray-50 hover:bg-gray-100 transition flex items-center justify-between"
+                className="w-full px-6 py-4 text-start bg-gray-50 hover:bg-gray-100 transition flex items-center justify-between"
                 onClick={() => setOpenIndex(openIndex === faq.id ? null : faq.id)}
               >
                 <h4 className="font-semibold text-gray-900">{faq.question}</h4>
-                <span className="text-2xl text-gray-500">
+                <span className="text-2xl text-gray-500 flex-shrink-0 ms-4">
                   {openIndex === faq.id ? '−' : '+'}
                 </span>
               </button>
@@ -2426,17 +2439,7 @@ const FAQSection = () => {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-gray-600">
-                    {faq.answer.split(' ').map((word, i) => 
-                      word.toLowerCase() === 'navigating' || word.toLowerCase() === 'step-by-step' || word.toLowerCase() === 'core' || word.toLowerCase() === 'support' ? (
-                        <a key={i} href={faq.link} className="text-[#1d83b3] font-semibold hover:underline">
-                          {word}{' '}
-                        </a>
-                      ) : (
-                        <span key={i}>{word} </span>
-                      )
-                    )}
-                  </p>
+                  <p className="text-gray-600">{faq.answer}</p>
                 </motion.div>
               )}
             </motion.div>
@@ -2447,7 +2450,9 @@ const FAQSection = () => {
   );
 };
 
-const CompanyFooter = () => (
+const CompanyFooter = () => {
+  const { t } = useLang();
+  return (
   <footer
     className="relative mt-0 overflow-hidden text-slate-200"
     style={{ background: HERO_GRADIENT }}
@@ -2496,15 +2501,15 @@ const CompanyFooter = () => (
             <div>
               <h3 className="mb-3 text-xl font-bold text-white">FreeHub</h3>
               <p className="text-sm leading-relaxed text-slate-200">
-                FreeHub brings freelance opportunities from multiple platforms into one simple dashboard, with smart filters and instant alerts to help you build your independent career with confidence.
+                {t.footer.description}
               </p>
             </div>
 
             {/* Download Buttons with Description */}
             <div className="flex flex-col gap-3">
-              <h4 className="text-base font-bold text-white">Download the app</h4>
+              <h4 className="text-base font-bold text-white">{t.footer.downloadApp}</h4>
               <p className="text-sm text-slate-200">
-                Find us on the following stores
+                {t.footer.findUsOn}
               </p>
               <div className="flex flex-row flex-wrap gap-3 sm:gap-4">
                 <a
@@ -2517,13 +2522,13 @@ const CompanyFooter = () => (
                     className="h-9 w-9 flex-shrink-0 object-contain"
                     aria-hidden="true"
                   />
-                  <div className="text-left">
-                    <span className="block text-[10px] leading-tight text-white/80">Get it on</span>
-                    <span className="block text-sm font-semibold leading-tight">Google Play</span>
+                  <div className="text-start">
+                    <span className="block text-[10px] leading-tight text-white/80">{t.footer.getItOn}</span>
+                    <span className="block text-sm font-semibold leading-tight">{t.footer.googlePlay}</span>
                   </div>
                 </a>
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.app.freelanceHub"
+                  href="https://apps.apple.com/us/app/freehub/id6760947105"
                   className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-gray-900 shadow-lg transition hover:bg-white hover:border-white/40 hover:opacity-95"
                 >
                   <img
@@ -2532,9 +2537,9 @@ const CompanyFooter = () => (
                     className="h-9 w-9 flex-shrink-0 object-contain"
                     aria-hidden="true"
                   />
-                  <div className="text-left">
-                    <span className="block text-[10px] leading-tight text-gray-500">Download on the</span>
-                    <span className="block text-sm font-semibold leading-tight text-gray-900">App Store</span>
+                  <div className="text-start">
+                    <span className="block text-[10px] leading-tight text-gray-500">{t.footer.downloadOnThe}</span>
+                    <span className="block text-sm font-semibold leading-tight text-gray-900">{t.footer.appStore}</span>
                   </div>
                 </a>
               </div>
@@ -2542,7 +2547,7 @@ const CompanyFooter = () => (
           </div>
 
           {/* Second Column - Quick Links */}
-          <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
+          {/* <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
             <h4 className="mb-4 text-lg font-bold text-white">Quick links</h4>
             <a
               href="#how-it-works"
@@ -2574,11 +2579,11 @@ const CompanyFooter = () => (
             >
               Back to top
             </a>
-          </div>
+          </div> */}
 
           {/* Third Column - Social Media */}
         <div className="flex flex-col gap-3 text-sm font-semibold lg:col-span-1">
-  <h4 className="mb-4 text-lg font-bold text-white">Follow us</h4>
+  <h4 className="mb-4 text-lg font-bold text-white">{t.footer.followUs}</h4>
   <div className="flex flex-col gap-2">
     
     {/* أولاً: LinkedIn */}
@@ -2643,23 +2648,24 @@ const CompanyFooter = () => (
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-sm text-slate-300 sm:flex-row sm:px-6 lg:px-8">
-          <span>&copy; 2025 FreeHub. All rights reserved.</span>
+          <span>{t.footer.copyright}</span>
           <div className="flex gap-4">
             <a href="#how-it-works" className="transition hover:text-[#D6F4ED]">
-              About FreeHub
+              {t.footer.aboutFreeHub}
             </a>
             <a href="#contact" className="transition hover:text-[#D6F4ED]">
-              Support & contact
+              {t.footer.support}
             </a>
             <a href="#portfolio" className="transition hover:text-[#D6F4ED]">
-              Our work
+              {t.footer.ourWork}
             </a>
           </div>
         </div>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 const ScrollTop = () => {
   const [visible, setVisible] = useState(false);
@@ -2701,27 +2707,36 @@ const ScrollTop = () => {
 
 function LandingPage() {
   const [isLoadingImages] = useState(false);
+  const [lang, setLang] = useState('en');
+  const t = translations[lang];
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-  // SEO: Update document title and meta tags
   useEffect(() => {
-    // Update document title
-    document.title = 'FreeHub - Find and organize your freelance work opportunities';
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', dir);
 
-    // Update meta description
+    document.title =
+      lang === 'ar'
+        ? 'FreeHub - اعثر على فرص عملك الحر ونظّمها'
+        : 'FreeHub - Find and organize your freelance work opportunities';
+
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
         'content',
-        'FreeHub helps freelancers and independent professionals find, organize, and track work opportunities from multiple freelance platforms in one smart dashboard.'
+        lang === 'ar'
+          ? 'يساعد FreeHub المستقلين والمهنيين المستقلين على إيجاد فرص العمل من منصات متعددة وتتبعها في لوحة تحكم واحدة ذكية.'
+          : 'FreeHub helps freelancers and independent professionals find, organize, and track work opportunities from multiple freelance platforms in one smart dashboard.'
       );
     }
 
-    // Update Open Graph tags
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) {
       ogTitle.setAttribute(
         'content',
-        'FreeHub - All your freelance work opportunities in one place'
+        lang === 'ar'
+          ? 'FreeHub - جميع فرص عملك الحر في مكان واحد'
+          : 'FreeHub - All your freelance work opportunities in one place'
       );
     }
 
@@ -2729,22 +2744,20 @@ function LandingPage() {
     if (ogDescription) {
       ogDescription.setAttribute(
         'content',
-        'Connect your favorite freelance platforms, receive smart job alerts, and manage all your proposals in a single, powerful workspace.'
+        lang === 'ar'
+          ? 'اربط منصاتك المفضلة للعمل الحر، وتلقَّ تنبيهات الوظائف الذكية، وأدر جميع مقترحاتك في مساحة عمل واحدة قوية.'
+          : 'Connect your favorite freelance platforms, receive smart job alerts, and manage all your proposals in a single, powerful workspace.'
       );
     }
-
-    // Set HTML lang and dir attributes
-    document.documentElement.setAttribute('lang', 'en');
-    document.documentElement.setAttribute('dir', 'ltr');
-  }, []);
-
+  }, [lang, dir]);
 
   return (
-    <>
+    <LanguageContext.Provider value={{ lang, setLang, t }}>
       <div
         className="min-h-screen bg-white text-gray-900"
         id="kt_app_root"
-        dir="ltr"
+        dir={dir}
+        lang={lang}
         aria-busy={isLoadingImages}
       >
         <div className="mb-0" id="home">
@@ -2763,7 +2776,7 @@ function LandingPage() {
         <CompanyFooter />
         <ScrollTop />
       </div>
-    </>
+    </LanguageContext.Provider>
   );
 }
 
